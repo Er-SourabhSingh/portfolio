@@ -690,12 +690,52 @@
       .project-list { grid-template-columns: repeat(5, 1fr); }
     }
 
+    /* ── Plugin Popup ──────────────────────────────────── */
+    .plugin-popup { position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; visibility: hidden; }
+    .plugin-popup.active { visibility: visible; }
+    .plugin-popup-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.75); backdrop-filter: blur(4px); opacity: 0; transition: opacity .3s ease; }
+    .plugin-popup.active .plugin-popup-overlay { opacity: 1; }
+    .plugin-popup-box { position: relative; z-index: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 44px 36px 34px; max-width: 500px; width: calc(100% - 32px); backdrop-filter: blur(24px); box-shadow: var(--shadow-lg), 0 0 56px hsla(45,100%,72%,.09); transform: scale(.88) translateY(24px); opacity: 0; transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .3s; text-align: center; }
+    .plugin-popup.active .plugin-popup-box { transform: scale(1) translateY(0); opacity: 1; }
+    .plugin-popup-close { position: absolute; top: 14px; right: 14px; background: transparent; border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--text-2); font-size: 20px; cursor: pointer; transition: var(--t1); }
+    .plugin-popup-close:hover { background: var(--border); color: var(--text-1); }
+    .plugin-popup-icon-wrap { width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 20px; background: linear-gradient(135deg, hsla(45,100%,72%,.14), hsla(210,100%,65%,.11)); border: 1px solid hsla(45,100%,72%,.22); display: flex; align-items: center; justify-content: center; }
+    .plugin-popup-icon { font-size: 32px; color: hsl(45,100%,72%); }
+    .plugin-popup-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: var(--fw-6); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 14px; }
+    .plugin-popup-badge.manual { background: hsla(210,100%,65%,.1); color: hsl(210,100%,72%); border: 1px solid hsla(210,100%,65%,.22); }
+    .plugin-popup-badge.testing { background: hsla(45,100%,72%,.1); color: hsl(45,100%,72%); border: 1px solid hsla(45,100%,72%,.25); }
+    .plugin-popup-title { font-size: clamp(18px,4vw,22px); font-weight: var(--fw-7); margin-bottom: 14px; background: linear-gradient(135deg, hsl(45,100%,72%), hsl(210,100%,65%)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .plugin-popup-desc { font-size: 14px; line-height: 1.8; color: var(--text-2); margin-bottom: 26px; text-align: left; }
+    .plugin-popup-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 26px; border-radius: var(--radius-md); background: linear-gradient(135deg, hsla(45,100%,72%,.13), hsla(210,100%,65%,.11)); border: 1px solid hsla(45,100%,72%,.3); color: hsl(45,100%,72%); font-size: 14px; font-weight: var(--fw-6); text-decoration: none; transition: var(--t1); }
+    .plugin-popup-btn:hover { background: linear-gradient(135deg, hsla(45,100%,72%,.24), hsla(210,100%,65%,.2)); border-color: hsla(45,100%,72%,.55); transform: translateY(-2px); }
+    .plugin-popup-btn.no-link { opacity: .4; pointer-events: none; cursor: default; }
+
   </style>
 </head>
 
 <body>
 
   <div class="overlay" data-overlay></div>
+
+  <!-- Plugin Detail Popup -->
+  <div class="plugin-popup" id="pluginPopup">
+    <div class="plugin-popup-overlay" id="pluginPopupOverlay"></div>
+    <div class="plugin-popup-box">
+      <button class="plugin-popup-close" id="pluginPopupClose">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <div class="plugin-popup-icon-wrap">
+        <ion-icon name="cube-outline" id="pluginPopupIcon" class="plugin-popup-icon"></ion-icon>
+      </div>
+      <div class="plugin-popup-badge" id="pluginPopupBadge">Manual Testing</div>
+      <h3 class="plugin-popup-title" id="pluginPopupTitle"></h3>
+      <p class="plugin-popup-desc" id="pluginPopupDesc"></p>
+      <a class="plugin-popup-btn" id="pluginPopupBtn" href="#" target="_blank" rel="noopener">
+        <ion-icon name="book-outline"></ion-icon>
+        View Knowledge Base
+      </a>
+    </div>
+  </div>
 
   <div class="modal-container" data-modal-container>
     <div class="testimonials-modal">
@@ -1532,6 +1572,142 @@
         }
       });
     }
+
+    // ── Plugin Popup ─────────────────────────────────────
+    var pluginData = {
+      "Timesheet Plugin": {
+        icon: "time-outline",
+        desc: "Comprehensive time tracking and approval plugin. Enables teams to log time, submit weekly or monthly timesheets, and run multi-level approval workflows. Simplifies visibility into team productivity and project time allocation.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/timesheet/"
+      },
+      "Workload Plugin": {
+        icon: "bar-chart-outline",
+        desc: "Plan work, track team capacity, and identify overload before it affects delivery. Manage teams, skills, leave requests, and holidays with workload analytics that give managers a clear picture of bandwidth across the entire team.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/workload-plugin/"
+      },
+      "Gantt Chart": {
+        icon: "analytics-outline",
+        desc: "Interactive timeline planning tool for Redmine. Teams can organize releases, schedule tasks, manage dependencies, track progress, and evaluate baseline comparisons — all inside one visual planning interface.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/gantt-chart/"
+      },
+      "Custom Dashboard Plugin": {
+        icon: "grid-outline",
+        desc: "Modern, interactive analytics plugin that brings project data together in one visual workspace. Supports 20+ chart types with customizable widgets, drag-and-drop layout, and real-time project insights.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/custom-dashboard/"
+      },
+      "Agile Board Plugin": {
+        icon: "layers-outline",
+        desc: "Modern Agile planning and execution plugin supporting Kanban and Scrum workflows. Features drag-and-drop issue movement, board customization, WIP limits, and sprint planning for fast-moving teams.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/agile-board/"
+      },
+      "Testcase Management Plugin": {
+        icon: "clipboard-outline",
+        desc: "Streamlines the software testing process with structured test case creation, execution, and reporting. Enables defining detailed test cases with steps and expected outcomes for full test coverage tracking.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/testcase-management/"
+      },
+      "Helpdesk Plugin": {
+        icon: "headset-outline",
+        desc: "Fully integrated support management system built on Redmine. Streamlines customer communication, automates workflows, and improves response efficiency with advanced ticket management and SLA-driven automation.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/helpdesk-plugin/"
+      },
+      "Knowledge Base Plugin": {
+        icon: "library-outline",
+        desc: "Project-level documentation plugin for creating, organizing, and sharing structured knowledge. Provides hierarchical organization through Spaces, Folders, and Pages for clear and accessible team documentation.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/knowledge-base-plugin/"
+      },
+      "Issue Template Plugin": {
+        icon: "document-text-outline",
+        desc: "Define standardized templates for creating Redmine issues. Ensures all issues maintain a consistent structure and include essential information, reducing back-and-forth and improving overall ticket quality.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/issue-template-plugin/"
+      },
+      "Fluxshot Chrome Extension": {
+        icon: "camera-outline",
+        desc: "Powerful Chrome extension that integrates seamlessly with Redmine. Enables users to capture screenshots and create issues right from any browser tab — without ever leaving the current webpage.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/fluxshot-chrome-extension/"
+      },
+      "Checklist Plugin": {
+        icon: "checkbox-outline",
+        desc: "Flexible project management tool that enhances Redmine by adding task checklists to issues. Teams can track step-by-step progress, mark sub-tasks complete, and ensure nothing falls through the cracks.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/checklist-plugin/"
+      },
+      "Notification": {
+        icon: "notifications-outline",
+        desc: "Helps teams stay on top of important updates within Redmine by delivering contextual notifications for issue activity. Offers real-time delivery and integrations with Microsoft Teams and Slack.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/notification/"
+      },
+      "Time Tracker": {
+        icon: "stopwatch-outline",
+        desc: "Dedicated time tracking tool for Redmine. Allows users to log time from an intuitive timer interface, improving accuracy and reducing the friction of manual time entry across tasks and projects.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/time-tracker-app/"
+      },
+      "Inline Editor Plugin": {
+        icon: "create-outline",
+        desc: "Enhances Redmine's user experience by providing inline editing for various fields. Users can edit information directly on the page without reloading or navigating to separate forms, saving significant time.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/inline-editor-plugin/"
+      },
+      "Mentions Plugin": {
+        icon: "at-circle-outline",
+        desc: "Allows users to mention teammates within issue descriptions, comments, and wiki content. Mentioned users receive email notifications instantly, improving team communication and keeping everyone in the loop.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/mentions-plugin/"
+      },
+      "Tag Plugin": {
+        icon: "pricetag-outline",
+        desc: "Allows users to add custom tags to various Redmine entities. Provides flexible categorization and organization for more efficient searching, filtering, and retrieval of relevant issues and data.",
+        url: "https://www.redmineflux.com/knowledge-base/plugins/tag-plugin/"
+      },
+      "Redmineflux MCP": {
+        icon: "cube-outline",
+        desc: "Model Context Protocol integration for Redmineflux — connecting AI assistants directly to your Redmine project data for intelligent automation, natural language issue management, and AI-driven workflows. Note: this integration is currently in the testing phase.",
+        url: null,
+        status: "In Testing"
+      }
+    };
+
+    var pluginPopup      = document.getElementById("pluginPopup");
+    var pluginPopupOverlay = document.getElementById("pluginPopupOverlay");
+    var pluginPopupClose = document.getElementById("pluginPopupClose");
+    var pluginPopupTitle = document.getElementById("pluginPopupTitle");
+    var pluginPopupDesc  = document.getElementById("pluginPopupDesc");
+    var pluginPopupBtn   = document.getElementById("pluginPopupBtn");
+    var pluginPopupBadge = document.getElementById("pluginPopupBadge");
+    var pluginPopupIcon  = document.getElementById("pluginPopupIcon");
+
+    document.querySelectorAll('.project-item[data-category="manual testing"] a').forEach(function(link) {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        var titleEl = this.querySelector(".project-title");
+        if (!titleEl) return;
+        var name = titleEl.textContent.trim();
+        var data = pluginData[name];
+        if (!data) return;
+        pluginPopupTitle.textContent = name;
+        pluginPopupDesc.textContent  = data.desc;
+        pluginPopupIcon.setAttribute("name", data.icon || "cube-outline");
+        if (data.status === "In Testing") {
+          pluginPopupBadge.textContent  = "In Testing Phase";
+          pluginPopupBadge.className    = "plugin-popup-badge testing";
+          pluginPopupBtn.href           = "#";
+          pluginPopupBtn.className      = "plugin-popup-btn no-link";
+        } else {
+          pluginPopupBadge.textContent  = "Manual Testing";
+          pluginPopupBadge.className    = "plugin-popup-badge manual";
+          pluginPopupBtn.href           = data.url;
+          pluginPopupBtn.className      = "plugin-popup-btn";
+        }
+        pluginPopup.classList.add("active");
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+    function closePluginPopup() {
+      pluginPopup.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    pluginPopupOverlay.addEventListener("click", closePluginPopup);
+    pluginPopupClose.addEventListener("click", closePluginPopup);
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") closePluginPopup();
+    });
 
   </script>
 
