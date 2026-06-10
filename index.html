@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sourabh Singh — QA Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    a { text-decoration: none; }
+    li { list-style: none; }
+    img, ion-icon, a, button, time, span { display: block; }
+    button { font: inherit; background: none; border: none; text-align: left; cursor: pointer; }
+    input, textarea { display: block; width: 100%; background: none; font: inherit; }
+    ::selection { background: var(--gold); color: #0a0c12; }
+    :focus { outline-color: var(--gold); }
+    html { font-family: 'Poppins', sans-serif; }
+
+    :root {
+      --bg:        hsl(222, 22%, 7%);
+      --surface:   hsla(222, 20%, 12%, 0.92);
+      --surface2:  hsla(222, 18%, 16%, 0.85);
+      --border:    hsla(0, 0%, 100%, 0.07);
+      --border2:   hsla(0, 0%, 100%, 0.12);
+      --gold:      hsl(45, 100%, 72%);
+      --gold-dim:  hsla(45, 100%, 72%, 0.15);
+      --blue:      hsl(210, 100%, 65%);
+      --blue-dim:  hsla(210, 100%, 65%, 0.12);
+      --purple:    hsl(270, 80%, 70%);
+      --white:     hsl(0, 0%, 95%);
+      --muted:     hsla(0, 0%, 80%, 0.65);
+      --danger:    hsl(0, 70%, 60%);
+
+      --grad-gold:   linear-gradient(135deg, hsl(45,100%,72%), hsl(35,100%,60%));
+      --grad-blue:   linear-gradient(135deg, hsl(210,100%,65%), hsl(190,100%,55%));
+      --grad-tri:    linear-gradient(135deg, hsl(45,100%,72%), hsl(210,100%,65%), hsl(270,80%,70%));
+      --grad-text:   linear-gradient(135deg, hsl(45,100%,78%), hsl(35,100%,65%));
+
+      --shadow-sm:  0 2px 12px hsla(0,0%,0%,0.3);
+      --shadow-md:  0 8px 32px hsla(0,0%,0%,0.4);
+      --shadow-lg:  0 16px 56px hsla(0,0%,0%,0.5);
+      --shadow-glow: 0 0 24px hsla(45,100%,72%,0.18);
+
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --t1: 0.25s ease;
+      --t2: 0.45s cubic-bezier(0.4,0,0.2,1);
+
+      --fs-1: 24px; --fs-2: 18px; --fs-3: 17px; --fs-4: 16px;
+      --fs-5: 15px; --fs-6: 14px; --fs-7: 13px; --fs-8: 11px;
+      --fw-3: 300; --fw-4: 400; --fw-5: 500; --fw-6: 600; --fw-7: 700;
+    }
+
+    /* ─── BODY / BACKGROUND ─────────────────────────────────────────────────── */
+    body {
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Aurora blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+    }
+    body::before {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, hsla(210,100%,50%,0.07) 0%, transparent 70%);
+      top: -200px; left: -200px;
+      animation: blob1 12s ease-in-out infinite;
+    }
+    body::after {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, hsla(270,80%,60%,0.06) 0%, transparent 70%);
+      bottom: -150px; right: -150px;
+      animation: blob2 15s ease-in-out infinite;
+    }
+    @keyframes blob1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      40%     { transform: translate(60px,40px) scale(1.15); }
+      70%     { transform: translate(-30px,70px) scale(0.9); }
+    }
+    @keyframes blob2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      40%     { transform: translate(-50px,-30px) scale(1.1); }
+      70%     { transform: translate(40px,-60px) scale(0.92); }
+    }
+
+    /* ─── REUSED ─────────────────────────────────────────────────────────────── */
+    .sidebar, article {
+      background: var(--surface);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 15px;
+      box-shadow: var(--shadow-md), inset 0 1px 0 var(--border2);
+      z-index: 1;
+      position: relative;
+    }
+
+    .separator { width: 100%; height: 1px; background: var(--border); margin: 16px 0; }
+
+    .icon-box {
+      position: relative;
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 16px; color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid hsla(45,100%,72%,0.2);
+      z-index: 1;
+      transition: var(--t1);
+    }
+    .icon-box ion-icon { --ionicon-stroke-width: 35px; }
+
+    article { display: none; }
+    article.active { display: block; animation: fadeUp 0.5s ease backwards; }
+    @keyframes fadeUp {
+      0%   { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .h2, .h3, .h4, .h5 { color: var(--white); }
+    .h2 { font-size: var(--fs-1); font-weight: var(--fw-7); }
+    .h3 { font-size: var(--fs-2); font-weight: var(--fw-6); }
+    .h4 { font-size: var(--fs-4); font-weight: var(--fw-5); }
+    .h5 { font-size: var(--fs-7); font-weight: var(--fw-5); }
+
+    .article-title {
+      position: relative;
+      padding-bottom: 10px;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    .article-title::after {
+      content: "";
+      position: absolute; bottom: 0; left: 0;
+      width: 40px; height: 3px;
+      background: var(--grad-gold);
+      border-radius: 3px;
+    }
+
+    .has-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .has-scrollbar::-webkit-scrollbar-track { background: var(--surface2); border-radius: 4px; }
+    .has-scrollbar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+
+    .content-card {
+      position: relative;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 15px; padding-top: 45px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      z-index: 1;
+    }
+
+    main { margin: 15px 12px; margin-bottom: 75px; min-width: 259px; }
+
+    /* ─── SIDEBAR ────────────────────────────────────────────────────────────── */
+    .sidebar { margin-bottom: 15px; max-height: 112px; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
+    .sidebar.active { max-height: 420px; }
+
+    .sidebar-info { position: relative; display: flex; align-items: center; gap: 15px; }
+
+    /* Spinning gradient border on avatar */
+    .avatar-box {
+      position: relative;
+      border-radius: 22px;
+      padding: 3px;
+      z-index: 0;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar-box::before {
+      content: '';
+      position: absolute;
+      inset: -60%;
+      background: conic-gradient(
+        hsl(45,100%,72%),
+        hsl(210,100%,65%),
+        hsl(270,80%,70%),
+        hsl(45,100%,72%)
+      );
+      animation: spinBorder 4s linear infinite;
+      z-index: -1;
+    }
+    .avatar-box::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: var(--bg);
+      border-radius: 20px;
+      z-index: -1;
+    }
+    @keyframes spinBorder { to { transform: rotate(360deg); } }
+
+    .avatar-img {
+      display: block;
+      width: 78px; height: 78px;
+      border-radius: 19px;
+      object-fit: cover;
+      object-position: top center;
+      position: relative; z-index: 1;
+    }
+    .avatar-initials {
+      position: relative;
+      width: 78px; height: 78px;
+      border-radius: 19px;
+      background: linear-gradient(135deg, hsl(45,100%,72%), hsl(35,100%,60%));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: var(--fw-7);
+      color: #0a0c12;
+      letter-spacing: -1px;
+      z-index: 1;
+    }
+
+    .info-content .name {
+      background: linear-gradient(135deg, var(--white) 40%, var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: var(--fs-3);
+      font-weight: var(--fw-6);
+      letter-spacing: -0.25px;
+      margin-bottom: 10px;
+    }
+    .info-content .title {
+      color: var(--bg);
+      background: var(--grad-gold);
+      font-size: var(--fs-8);
+      font-weight: var(--fw-5);
+      width: max-content;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .info_more-btn {
+      position: absolute; top: -15px; right: -15px;
+      border-radius: 0 var(--radius-lg);
+      font-size: 13px; color: var(--gold);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--t1);
+      z-index: 1;
+    }
+    .info_more-btn:hover { background: var(--gold-dim); border-color: hsla(45,100%,72%,0.3); }
+    .info_more-btn span { display: none; }
+
+    .sidebar-info_more { opacity: 0; visibility: hidden; transition: var(--t2); }
+    .sidebar.active .sidebar-info_more { opacity: 1; visibility: visible; }
+
+    .contacts-list { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .contact-item { display: flex; align-items: center; gap: 14px; }
+    .contact-info { max-width: calc(100% - 44px); }
+    .contact-title { color: var(--muted); font-size: var(--fs-8); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
+    .contact-info :is(.contact-link, time, address) { color: var(--white); font-size: var(--fs-7); font-weight: var(--fw-4); overflow-wrap: break-word; word-break: break-all; }
+    .contact-info address { font-style: normal; word-break: break-word; }
+    .contact-link { transition: color var(--t1); }
+    .contact-link:hover { color: var(--gold); }
+
+    .social-list { display: flex; align-items: center; gap: 12px; padding-left: 4px; }
+    .social-link {
+      color: var(--muted); font-size: 20px;
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      transition: var(--t1);
+    }
+    .social-link:hover {
+      color: var(--gold);
+      background: var(--gold-dim);
+      border-color: hsla(45,100%,72%,0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────────────────────────────────── */
+    .navbar {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: hsla(222, 22%, 9%, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      box-shadow: var(--shadow-md);
+      z-index: 5;
+    }
+    .navbar-list { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; padding: 0 10px; }
+    .navbar-link {
+      color: var(--muted); font-size: var(--fs-8);
+      padding: 20px 10px;
+      transition: color var(--t1);
+      position: relative;
+    }
+    .navbar-link::after {
+      content: '';
+      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 2px;
+      background: var(--grad-gold);
+      border-radius: 2px;
+      transition: width var(--t1);
+    }
+    .navbar-link:hover { color: var(--white); }
+    .navbar-link.active { color: var(--gold); }
+    .navbar-link.active::after { width: 20px; }
+
+    /* ─── ABOUT ──────────────────────────────────────────────────────────────── */
+    .about .article-title { margin-bottom: 15px; }
+    .about-text { color: var(--muted); font-size: var(--fs-6); font-weight: var(--fw-3); line-height: 1.8; }
+    .about-text p { margin-bottom: 15px; }
+    .about-text strong { color: var(--gold); font-weight: var(--fw-5); }
+
+    .service { margin-bottom: 35px; }
+    .service-title { margin-bottom: 20px; color: var(--white); }
+    .service-list { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+    .service-item {
+      position: relative;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      transition: var(--t2);
+      overflow: hidden;
+    }
+    .service-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--gold-dim) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--t1);
+      border-radius: inherit;
+    }
+    .service-item:hover { transform: translateY(-4px); border-color: hsla(45,100%,72%,0.25); box-shadow: var(--shadow-md), var(--shadow-glow); }
+    .service-item:hover::before { opacity: 1; }
+
+    .service-icon-box { margin-bottom: 12px; }
+    .service-icon {
+      font-size: 40px;
+      color: var(--gold);
+      filter: drop-shadow(0 0 10px hsla(45,100%,72%,0.5));
+      transition: transform var(--t1);
+    }
+    .service-item:hover .service-icon { transform: scale(1.1); }
+
+    .service-content-box { text-align: center; }
+    .service-item-title { margin-bottom: 8px; font-size: var(--fs-4); }
+    .service-item-text { color: var(--muted); font-size: var(--fs-6); font-weight: var(--fw-3); line-height: 1.7; }
+
+    /* ─── RESUME ─────────────────────────────────────────────────────────────── */
+    .article-title { margin-bottom: 30px; }
+
+    .timeline { margin-bottom: 35px; }
+    .timeline .title-wrapper { display: flex; align-items: center; gap: 14px; margin-bottom: 25px; }
+
+    .timeline-list { font-size: var(--fs-6); margin-left: 45px; }
+    .timeline-item { position: relative; }
+    .timeline-item:not(:last-child) { margin-bottom: 24px; }
+    .timeline-item-title { font-size: var(--fs-6); font-weight: var(--fw-5); line-height: 1.4; margin-bottom: 6px; color: var(--white); }
+    .timeline-list span { color: var(--gold); font-weight: var(--fw-5); font-size: var(--fs-7); display: block; margin-bottom: 8px; }
+
+    .timeline-item:not(:last-child)::before {
+      content: "";
+      position: absolute; top: -20px; left: -30px;
+      width: 1px; height: calc(100% + 44px);
+      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+    }
+    .timeline-item::after {
+      content: "";
+      position: absolute; top: 4px; left: -34px;
+      height: 8px; width: 8px;
+      background: var(--grad-gold);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px hsla(45,100%,72%,0.3), 0 0 10px hsla(45,100%,72%,0.5);
+    }
+    .timeline-text { color: var(--muted); font-weight: var(--fw-3); line-height: 1.7; font-size: var(--fs-6); }
+
+    .skills-title { margin-bottom: 20px; color: var(--white); }
+    .skills-list { padding: 24px; }
+    .skills-item:not(:last-child) { margin-bottom: 18px; }
+    .skill .title-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-bottom: 8px; }
+    .skill .title-wrapper data { color: var(--gold); font-size: var(--fs-7); font-weight: var(--fw-5); }
+    .skill-progress-bg {
+      background: hsla(0,0%,100%,0.07);
+      width: 100%; height: 6px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .skill-progress-fill {
+      background: var(--grad-gold);
+      height: 100%;
+      border-radius: inherit;
+      width: 0;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 0 8px hsla(45,100%,72%,0.5);
+    }
+
+    /* ─── PORTFOLIO ──────────────────────────────────────────────────────────── */
+    .filter-list { display: none; }
+    .filter-select-box { position: relative; margin-bottom: 25px; }
+    .filter-select {
+      background: var(--surface2); color: var(--white);
+      display: flex; justify-content: space-between; align-items: center;
+      width: 100%; padding: 12px 16px;
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      font-size: var(--fs-6); font-weight: var(--fw-4);
+    }
+    .filter-select.active .select-icon { transform: rotate(0.5turn); }
+    .select-list {
+      background: var(--surface2);
+      position: absolute; top: calc(100% + 6px);
+      width: 100%; padding: 6px;
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      z-index: 2; opacity: 0; visibility: hidden;
+      pointer-events: none; transition: 0.15s ease-in-out;
+    }
+    .filter-select.active + .select-list { opacity: 1; visibility: visible; pointer-events: all; }
+    .select-item button {
+      background: transparent; color: var(--muted);
+      font-size: var(--fs-6); width: 100%;
+      padding: 8px 10px; border-radius: 8px;
+      transition: var(--t1);
+    }
+    .select-item button:hover { color: var(--white); background: var(--gold-dim); }
+
+    .project-list { display: grid; grid-template-columns: 1fr; gap: 28px; margin-bottom: 10px; }
+    .project-item { display: none; }
+    .project-item.active { display: block; animation: scaleUp 0.3s ease forwards; }
+    @keyframes scaleUp { 0% { transform: scale(0.92); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .project-item > a { width: 100%; }
+
+    .project-img {
+      position: relative; width: 100%; height: 200px;
+      border-radius: var(--radius-md); overflow: hidden; margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+    .project-img::before {
+      content: ""; position: absolute; inset: 0;
+      background: transparent; z-index: 1; transition: var(--t1);
+    }
+    .project-item > a:hover .project-img::before { background: hsla(0,0%,0%,0.45); }
+
+    .project-item-icon-box {
+      --scale: 0.8;
+      background: hsla(0,0%,0%,0.5);
+      backdrop-filter: blur(6px);
+      color: var(--gold);
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%) scale(var(--scale));
+      font-size: 22px; padding: 16px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border2);
+      opacity: 0; z-index: 2; transition: var(--t1);
+    }
+    .project-item > a:hover .project-item-icon-box { --scale: 1; opacity: 1; }
+
+    .project-title, .project-category { margin-left: 4px; }
+    .project-title { color: var(--white); font-size: var(--fs-5); font-weight: var(--fw-5); line-height: 1.3; margin-bottom: 4px; }
+    .project-category { color: var(--muted); font-size: var(--fs-7); font-weight: var(--fw-3); }
+
+    /* Project thumbnails */
+    .project-thumb {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+      position: relative;
+      transition: transform 0.4s ease;
+    }
+    .project-item > a:hover .project-thumb { transform: scale(1.06); }
+
+    .project-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    .project-thumb-1 { background: linear-gradient(135deg, hsl(222,60%,18%), hsl(200,80%,14%)); }
+    .project-thumb-2 { background: linear-gradient(135deg, hsl(155,55%,14%), hsl(180,60%,12%)); }
+    .project-thumb-3 { background: linear-gradient(135deg, hsl(270,50%,18%), hsl(230,60%,14%)); }
+
+    .project-thumb-mt1 { background: linear-gradient(135deg, hsl(180,60%,16%), hsl(160,65%,12%)); }
+    .project-thumb-mt2 { background: linear-gradient(135deg, hsl(15,55%,20%), hsl(350,50%,15%)); }
+    .project-thumb-mt3 { background: linear-gradient(135deg, hsl(195,70%,16%), hsl(210,65%,12%)); }
+    .project-thumb-mt4 { background: linear-gradient(135deg, hsl(150,55%,14%), hsl(165,60%,10%)); }
+    .project-thumb-mt5 { background: linear-gradient(135deg, hsl(240,55%,20%), hsl(255,60%,15%)); }
+
+    .thumb-icon {
+      font-size: 46px; color: var(--gold);
+      filter: drop-shadow(0 0 16px hsla(45,100%,72%,0.7));
+      position: relative; z-index: 1;
+    }
+    .thumb-stack {
+      font-size: 11px; font-weight: var(--fw-5);
+      color: var(--muted); text-align: center;
+      padding: 5px 14px;
+      background: hsla(0,0%,0%,0.35);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      position: relative; z-index: 1;
+      line-height: 1.6;
+    }
+
+    /* ─── CONTACT ────────────────────────────────────────────────────────────── */
+    .mapbox {
+      position: relative; height: 250px; width: 100%;
+      border-radius: var(--radius-md); margin-bottom: 28px;
+      border: 1px solid var(--border); overflow: hidden;
+    }
+    .mapbox figure { height: 100%; }
+    .mapbox iframe { width: 100%; height: 100%; border: none; filter: grayscale(1) invert(1); }
+
+    .contact-form { margin-bottom: 10px; }
+    .form-title { margin-bottom: 20px; color: var(--white); }
+
+    .input-wrapper { display: grid; grid-template-columns: 1fr; gap: 22px; margin-bottom: 22px; }
+
+    .form-input {
+      color: var(--white); font-size: var(--fs-6); font-weight: var(--fw-4);
+      padding: 13px 18px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: border-color var(--t1), box-shadow var(--t1);
+    }
+    .form-input::placeholder { color: var(--muted); font-weight: var(--fw-4); }
+    .form-input:focus {
+      border-color: hsla(45,100%,72%,0.5);
+      box-shadow: 0 0 0 3px var(--gold-dim);
+    }
+    .form-input:focus:invalid { border-color: var(--danger); box-shadow: 0 0 0 3px hsla(0,70%,60%,0.12); }
+
+    textarea.form-input { min-height: 100px; height: 120px; max-height: 200px; resize: vertical; margin-bottom: 22px; }
+    textarea.form-input::-webkit-resizer { display: none; }
+
+    .form-btn {
+      position: relative; width: 100%;
+      background: var(--grad-gold);
+      color: #0a0c12;
+      display: flex; justify-content: center; align-items: center; gap: 10px;
+      padding: 14px 24px; border-radius: var(--radius-sm);
+      font-size: var(--fs-6); font-weight: var(--fw-6);
+      text-transform: capitalize;
+      box-shadow: var(--shadow-sm), 0 0 20px var(--gold-dim);
+      transition: var(--t1);
+    }
+    .form-btn:not(:disabled):hover { transform: translateY(-2px); box-shadow: var(--shadow-md), 0 0 30px hsla(45,100%,72%,0.3); }
+    .form-btn ion-icon { font-size: 16px; }
+    .form-btn:disabled { opacity: 0.45; cursor: not-allowed; background: var(--surface2); color: var(--muted); box-shadow: none; }
+
+    /* ─── MODAL (stub) ───────────────────────────────────────────────────────── */
+    .modal-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; overflow-y: auto; overscroll-behavior: contain; z-index: 20; pointer-events: none; visibility: hidden; }
+    .modal-container.active { pointer-events: all; visibility: visible; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: hsl(0,0%,5%); opacity: 0; visibility: hidden; pointer-events: none; z-index: 1; transition: var(--t1); }
+    .overlay.active { opacity: 0.85; visibility: visible; pointer-events: all; }
+    .testimonials-modal { background: var(--surface); position: relative; padding: 15px; margin: 15px 12px; border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); transform: scale(1.1); opacity: 0; transition: var(--t1); z-index: 2; }
+    .modal-container.active .testimonials-modal { transform: scale(1); opacity: 1; }
+    .modal-close-btn { position: absolute; top: 15px; right: 15px; background: var(--surface2); border-radius: 8px; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; color: var(--white); font-size: 18px; opacity: 0.7; }
+    .modal-close-btn:hover { opacity: 1; }
+    .modal-avatar-box { background: var(--surface2); width: max-content; border-radius: var(--radius-sm); margin-bottom: 15px; }
+    .modal-img-wrapper > img { display: none; }
+    .modal-title { margin-bottom: 4px; }
+    .modal-content time { font-size: var(--fs-6); color: var(--muted); font-weight: var(--fw-3); margin-bottom: 10px; }
+    .modal-content p { color: var(--muted); font-size: var(--fs-6); font-weight: var(--fw-3); line-height: 1.6; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+    @media (min-width: 450px) { .project-img { height: auto; } }
+
+    @media (min-width: 580px) {
+      :root { --fs-1: 32px; --fs-2: 24px; --fs-3: 26px; --fs-4: 18px; --fs-6: 15px; --fs-7: 15px; --fs-8: 12px; }
+      .sidebar, article { width: 520px; margin-inline: auto; padding: 30px; }
+      .article-title { font-weight: var(--fw-7); padding-bottom: 15px; }
+      .article-title::after { width: 48px; height: 4px; }
+      .icon-box { width: 48px; height: 48px; border-radius: 12px; font-size: 18px; }
+      main { margin-top: 60px; margin-bottom: 100px; }
+      .sidebar { max-height: 180px; margin-bottom: 30px; }
+      .sidebar.active { max-height: 600px; }
+      .sidebar-info { gap: 25px; }
+      .avatar-img { width: 116px; height: 116px; border-radius: 27px; }
+      .avatar-initials { width: 116px; height: 116px; font-size: 38px; border-radius: 27px; }
+      .avatar-box::after { border-radius: 28px; inset: 3px; }
+      .info-content .name { margin-bottom: 15px; }
+      .info-content .title { padding: 5px 18px; }
+      .info_more-btn { top: -30px; right: -30px; padding: 10px 15px; }
+      .info_more-btn span { display: block; font-size: var(--fs-8); }
+      .info_more-btn ion-icon { display: none; }
+      .separator { margin: 28px 0; }
+      .contacts-list { gap: 18px; }
+      .navbar { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+      .navbar-list { gap: 20px; }
+      .navbar-link { --fs-8: 14px; }
+      .about .article-title { margin-bottom: 20px; }
+      .about-text { margin-bottom: 40px; }
+      .service-item { display: flex; align-items: flex-start; gap: 20px; padding: 28px; }
+      .service-icon-box { margin-bottom: 0; margin-top: 4px; flex-shrink: 0; }
+      .service-content-box { text-align: left; }
+      .timeline-list { margin-left: 60px; }
+      .timeline-item:not(:last-child)::before { left: -38px; }
+      .timeline-item::after { height: 8px; width: 8px; left: -42px; }
+      .skills-item:not(:last-child) { margin-bottom: 22px; }
+      .project-img { border-radius: var(--radius-md); }
+      .mapbox { height: 380px; border-radius: var(--radius-lg); }
+      .input-wrapper { gap: 28px; margin-bottom: 28px; }
+      .form-input { padding: 14px 20px; }
+      textarea.form-input { margin-bottom: 28px; }
+    }
+
+    @media (min-width: 768px) {
+      .sidebar, article { width: 700px; }
+      .contacts-list { grid-template-columns: 1fr 1fr; gap: 24px 14px; }
+      .navbar-link { --fs-8: 15px; }
+      .article-title { padding-bottom: 20px; }
+      .filter-select-box { display: none; }
+      .filter-list { display: flex; align-items: center; gap: 20px; padding-left: 5px; margin-bottom: 28px; }
+      .filter-item button { color: var(--muted); font-size: var(--fs-5); font-weight: var(--fw-5); transition: var(--t1); padding: 6px 16px; border-radius: 20px; border: 1px solid transparent; }
+      .filter-item button:hover { color: var(--white); }
+      .filter-item button.active { color: var(--bg); background: var(--grad-gold); }
+      .project-list { grid-template-columns: 1fr 1fr; }
+      .input-wrapper { grid-template-columns: 1fr 1fr; }
+      .form-btn { width: max-content; margin-left: auto; }
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar, article { width: 950px; }
+      main { margin-bottom: 60px; }
+      .main-content { position: relative; width: max-content; margin: auto; }
+      .navbar { position: absolute; bottom: auto; top: 0; left: auto; right: 0; width: max-content; border-radius: 0 var(--radius-lg); padding: 0 20px; box-shadow: none; background: hsla(222,22%,9%,0.6); }
+      .navbar-list { gap: 30px; padding: 0 20px; }
+      .navbar-link { font-weight: var(--fw-5); }
+      .service-list { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .project-list { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 1250px) {
+      body::-webkit-scrollbar { width: 8px; }
+      body::-webkit-scrollbar-track { background: var(--bg); }
+      body::-webkit-scrollbar-thumb { background: hsla(0,0%,100%,0.12); border-radius: 8px; }
+      body::-webkit-scrollbar-thumb:hover { background: hsla(0,0%,100%,0.2); }
+      .sidebar, article { width: auto; }
+      article { min-height: auto; }
+      main { max-width: min(92vw, 1600px); margin-inline: auto; display: flex; justify-content: center; align-items: flex-start; gap: 28px; }
+      .main-content { min-width: 75%; width: 75%; margin: 0; }
+      .sidebar { position: sticky; top: 60px; max-height: max-content; height: auto; margin-bottom: 0; padding-top: 60px; z-index: 1; }
+      .sidebar-info { flex-direction: column; align-items: center; }
+      .avatar-img { width: 148px; height: 148px; border-radius: 34px; }
+      .avatar-initials { width: 148px; height: 148px; font-size: 50px; border-radius: 34px; }
+      .avatar-box::after { border-radius: 35px; }
+      .info-content .name { white-space: nowrap; text-align: center; }
+      .info-content .title { margin: auto; }
+      .info_more-btn { display: none; }
+      .sidebar-info_more { opacity: 1; visibility: visible; }
+      .contacts-list { grid-template-columns: 1fr; }
+      .contact-info :is(.contact-link, time, address) { --fs-7: 14px; font-weight: var(--fw-3); }
+      .separator:last-of-type { display: none; }
+      .social-list { justify-content: center; }
+      .timeline-text { max-width: 700px; }
+    }
+
+    @media (min-width: 1600px) {
+      main { max-width: min(92vw, 1760px); gap: 36px; }
+      .sidebar { padding-top: 70px; }
+      .project-list { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (min-width: 1920px) {
+      main { max-width: 1840px; gap: 40px; }
+      .project-list { grid-template-columns: repeat(5, 1fr); }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="overlay" data-overlay></div>
+
+  <div class="modal-container" data-modal-container>
+    <div class="testimonials-modal">
+      <button class="modal-close-btn" data-modal-close-btn>
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <div class="modal-img-wrapper">
+        <figure class="modal-avatar-box">
+          <img src="" data-modal-img alt="" width="80">
+        </figure>
+        <img src="" alt="">
+      </div>
+      <div class="modal-content">
+        <h4 class="h4 modal-title" data-modal-title></h4>
+        <time datetime=""></time>
+        <p data-modal-text></p>
+      </div>
+    </div>
+  </div>
+
+  <main>
+
+    <!--  SIDEBAR  -->
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+        <figure class="avatar-box">
+          <img src="img/My_image.png" alt="Sourabh Singh" class="avatar-img"
+               onerror="this.style.display='none'; document.querySelector('.avatar-initials').style.display='flex';">
+          <div class="avatar-initials" style="display:none;">SS</div>
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Sourabh Singh">Sourabh Singh</h1>
+          <p class="title">QA Engineer</p>
+        </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+      </div>
+
+      <div class="sidebar-info_more">
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+              <a href="mailto:er.sourabh.singh0601@gmail.com" class="contact-link">er.sourabh.singh0601@gmail.com</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Phone</p>
+              <a href="tel:+919752267677" class="contact-link">+91 9752267677</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Birthday</p>
+              <time datetime="2000-06-01">June 1, 2000</time>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Location</p>
+              <address>Indore, Madhya Pradesh, India</address>
+            </div>
+          </li>
+        </ul>
+
+        <div class="separator"></div>
+
+        <ul class="social-list">
+          <li class="social-item">
+            <a href="https://www.linkedin.com/in/sourabhsingh0601" target="_blank" rel="noopener" class="social-link">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+          </li>
+          <li class="social-item">
+            <a href="https://github.com/Er-SourabhSingh" target="_blank" rel="noopener" class="social-link">
+              <ion-icon name="logo-github"></ion-icon>
+            </a>
+          </li>
+        </ul>
+
+      </div>
+    </aside>
+
+
+    <div class="main-content">
+
+      <!--  NAVBAR  -->
+      <nav class="navbar">
+        <ul class="navbar-list">
+          <li class="navbar-item"><button class="navbar-link active" data-nav-link>About</button></li>
+          <li class="navbar-item"><button class="navbar-link" data-nav-link>Resume</button></li>
+          <li class="navbar-item"><button class="navbar-link" data-nav-link>Portfolio</button></li>
+          <li class="navbar-item"><button class="navbar-link" data-nav-link>Contact</button></li>
+        </ul>
+      </nav>
+
+
+      <!--  ABOUT  -->
+      <article class="about active" data-page="about">
+
+        <header>
+          <h2 class="h2 article-title">About me</h2>
+        </header>
+
+        <section class="about-text">
+          <p>
+            I'm a QA Engineer with 2+ years of experience at
+            <strong>Zehntech Technologies Pvt. Ltd.</strong>,
+            based in Indore, India. I specialize in manual testing — functional, regression,
+            and end-to-end — across complex enterprise applications covering 8+ modules.
+          </p>
+          <p>
+            Beyond daily testing, I actively build automation frameworks using
+            <strong>Selenium WebDriver + Java</strong> with TestNG, Page Object Model,
+            and Data-Driven testing. I thrive in Agile/Scrum environments and bring a
+            quality-first mindset to every stage of the SDLC.
+          </p>
+        </section>
+
+        <section class="service">
+          <h3 class="h3 service-title">What I do</h3>
+          <ul class="service-list">
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="checkmark-done-circle-outline" class="service-icon"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Manual Testing</h4>
+                <p class="service-item-text">Functional, regression, and E2E testing with thorough test case design, data validation, RBAC testing, and full defect lifecycle management via Redmine.</p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="code-slash-outline" class="service-icon"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Test Automation</h4>
+                <p class="service-item-text">Building hybrid frameworks using Selenium WebDriver + Java, TestNG, Maven, POM, and Data-Driven testing with Excel — integrated via Jenkins CI.</p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="cloud-outline" class="service-icon"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">API Testing</h4>
+                <p class="service-item-text">REST API validation and endpoint testing using Postman — covering request/response verification, authentication flows, and data integrity checks.</p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="speedometer-outline" class="service-icon"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Performance Testing</h4>
+                <p class="service-item-text">Load and stress testing with Apache JMeter to validate application performance, response times, and stability under concurrent user load.</p>
+              </div>
+            </li>
+
+          </ul>
+        </section>
+
+      </article>
+
+
+      <!--  RESUME  -->
+      <article class="resume" data-page="resume">
+
+        <header>
+          <h2 class="h2 article-title">Resume</h2>
+        </header>
+
+        <section class="timeline">
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+            <h3 class="h3">Education</h3>
+          </div>
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Sushila Devi Bansal College of Technology</h4>
+              <span>2019 — 2023</span>
+              <p class="timeline-text">B.Tech in Information Technology. Built a strong foundation in programming, software engineering, computer networks, and system design principles.</p>
+            </li>
+          </ol>
+        </section>
+
+        <section class="timeline">
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="briefcase-outline"></ion-icon>
+            </div>
+            <h3 class="h3">Experience</h3>
+          </div>
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">QA Engineer — Zehntech Technologies Pvt. Ltd.</h4>
+              <span>Mar 2024 — Present</span>
+              <p class="timeline-text">Performing manual testing (functional, regression, E2E) across 8+ application modules. Conducting API testing with Postman and performance testing with JMeter. Building Selenium WebDriver + Java automation frameworks. Participating in Agile/Scrum ceremonies including sprint planning and daily stand-ups.</p>
+            </li>
+          </ol>
+        </section>
+
+        <section class="skill">
+          <h3 class="h3 skills-title">My skills</h3>
+          <ul class="skills-list content-card">
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Manual Testing</h5>
+                <data value="90">90%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" data-fill="90%"></div>
+              </div>
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">API Testing (Postman)</h5>
+                <data value="85">85%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" data-fill="85%"></div>
+              </div>
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Agile / Scrum</h5>
+                <data value="82">82%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" data-fill="82%"></div>
+              </div>
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">TestNG / POM Framework</h5>
+                <data value="80">80%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" data-fill="80%"></div>
+              </div>
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Selenium WebDriver + Java</h5>
+                <data value="75">75%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" data-fill="75%"></div>
+              </div>
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Git / Version Control</h5>
+                <data value="75">75%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" data-fill="75%"></div>
+              </div>
+            </li>
+
+            <li class="skills-item">
+              <div class="title-wrapper">
+                <h5 class="h5">Performance Testing (JMeter)</h5>
+                <data value="70">70%</data>
+              </div>
+              <div class="skill-progress-bg">
+                <div class="skill-progress-fill" data-fill="70%"></div>
+              </div>
+            </li>
+
+          </ul>
+        </section>
+
+      </article>
+
+
+      <!--  PORTFOLIO  -->
+      <article class="portfolio" data-page="portfolio">
+
+        <header>
+          <h2 class="h2 article-title">Portfolio</h2>
+        </header>
+
+        <ul class="filter-list">
+          <li class="filter-item"><button class="active" data-filter-btn>All</button></li>
+          <li class="filter-item"><button data-filter-btn>Manual Testing</button></li>
+          <li class="filter-item"><button data-filter-btn>Automation Testing</button></li>
+        </ul>
+
+        <div class="filter-select-box">
+          <button class="filter-select" data-select>
+            <div class="select-value" data-selecct-value>Filter by category</div>
+            <div class="select-icon"><ion-icon name="chevron-down"></ion-icon></div>
+          </button>
+          <ul class="select-list">
+            <li class="select-item"><button data-select-item>All</button></li>
+            <li class="select-item"><button data-select-item>Manual Testing</button></li>
+            <li class="select-item"><button data-select-item>Automation Testing</button></li>
+          </ul>
+        </div>
+
+        <ul class="project-list">
+
+          <!-- MANUAL TESTING PROJECTS -->
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt1">
+                  <ion-icon name="time-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Functional · Regression · E2E Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Timesheet Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt2">
+                  <ion-icon name="bar-chart-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Functional · Regression · E2E Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Workload Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt3">
+                  <ion-icon name="analytics-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Functional · UI/UX · Workflow Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Gantt Chart</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt4">
+                  <ion-icon name="grid-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Functional · Widget · Dashboard Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Custom Dashboard Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt5">
+                  <ion-icon name="layers-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Sprint · Board · Agile Workflow Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Agile Board Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt1">
+                  <ion-icon name="clipboard-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Test Case · CRUD · Execution Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Testcase Management Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt2">
+                  <ion-icon name="headset-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Ticket · SLA · Support Workflow Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Helpdesk Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt3">
+                  <ion-icon name="library-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Articles · Search · Category Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Knowledge Base Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt4">
+                  <ion-icon name="document-text-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Template · CRUD · Workflow Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Issue Template Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt5">
+                  <ion-icon name="camera-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Extension · Screenshot · UI Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Fluxshot Chrome Extension</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt1">
+                  <ion-icon name="checkbox-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Checklist · CRUD · Functional Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Checklist Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt2">
+                  <ion-icon name="notifications-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Alerts · Delivery · Preference Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Notification</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt3">
+                  <ion-icon name="stopwatch-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Timer · Log · Functional Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Time Tracker</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt4">
+                  <ion-icon name="create-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Editor · Rich Text · UI Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Inline Editor Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt5">
+                  <ion-icon name="at-circle-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Mentions · Notifications · RBAC Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Mentions Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt1">
+                  <ion-icon name="pricetag-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Tags · Filter · CRUD Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Tag Plugin</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="manual testing">
+            <a href="#" onclick="return false;">
+              <figure class="project-img">
+                <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                <div class="project-thumb project-thumb-mt2">
+                  <ion-icon name="cube-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">MCP · Integration · API Testing</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Redmineflux MCP</h3>
+              <p class="project-category">Manual Testing</p>
+            </a>
+          </li>
+
+          <!-- AUTOMATION TESTING PROJECTS -->
+
+          <li class="project-item active" data-filter-item data-category="automation testing">
+            <a href="https://github.com/Er-SourabhSingh/TimesheetV15" target="_blank" rel="noopener">
+              <figure class="project-img">
+                <div class="project-item-icon-box">
+                  <ion-icon name="eye-outline"></ion-icon>
+                </div>
+                <div class="project-thumb project-thumb-1">
+                  <ion-icon name="calendar-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Selenium · TestNG · POM · Excel Data-Driven</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Timesheet Automation</h3>
+              <p class="project-category">Automation Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="automation testing">
+            <a href="https://github.com/Er-SourabhSingh/ChecklistVersion001" target="_blank" rel="noopener">
+              <figure class="project-img">
+                <div class="project-item-icon-box">
+                  <ion-icon name="eye-outline"></ion-icon>
+                </div>
+                <div class="project-thumb project-thumb-2">
+                  <ion-icon name="checkbox-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Selenium · TestNG · Page Object Model</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Checklist Plugin Automation</h3>
+              <p class="project-category">Automation Testing</p>
+            </a>
+          </li>
+
+          <li class="project-item active" data-filter-item data-category="automation testing">
+            <a href="https://github.com/Er-SourabhSingh/TagPluginV001" target="_blank" rel="noopener">
+              <figure class="project-img">
+                <div class="project-item-icon-box">
+                  <ion-icon name="eye-outline"></ion-icon>
+                </div>
+                <div class="project-thumb project-thumb-3">
+                  <ion-icon name="pricetag-outline" class="thumb-icon"></ion-icon>
+                  <p class="thumb-stack">Selenium · TestNG · CRUD &amp; Filter Automation</p>
+                </div>
+              </figure>
+              <h3 class="project-title">Tag Plugin Automation</h3>
+              <p class="project-category">Automation Testing</p>
+            </a>
+          </li>
+
+        </ul>
+
+      </article>
+
+
+      <!--  CONTACT  -->
+      <article class="contact" data-page="contact">
+
+        <header>
+          <h2 class="h2 article-title">Contact</h2>
+        </header>
+
+        <section class="mapbox">
+          <figure>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d235013.54722208474!2d75.74205!3d22.7195687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fcad1b410ddb%3A0x96ec4da356240f4!2sIndore%2C%20Madhya%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              width="400" height="300" loading="lazy" allowfullscreen
+              title="Indore, Madhya Pradesh, India">
+            </iframe>
+          </figure>
+        </section>
+
+        <section class="contact-form">
+          <h3 class="h3 form-title">Contact Form</h3>
+          <form action="#" class="form" data-form>
+            <div class="input-wrapper">
+              <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
+              <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
+            </div>
+            <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
+            <button class="form-btn" type="submit" disabled data-form-btn>
+              <ion-icon name="paper-plane"></ion-icon>
+              <span>Send Message</span>
+            </button>
+          </form>
+        </section>
+
+      </article>
+
+    </div>
+  </main>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    'use strict';
+
+    // ─── WEB3FORMS CONFIG ──────────────────────────────────────────────────────
+    // 1. Go to https://web3forms.com
+    // 2. Enter your email: er.sourabh.singh0601@gmail.com → click "Get Access Key"
+    // 3. Check your inbox → copy the access key and paste it below:
+    const WEB3FORMS_ACCESS_KEY = "8c83d789-8fab-412f-843e-5702897a65f4";
+    // ──────────────────────────────────────────────────────────────────────────
+
+    const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
+
+    // Sidebar
+    const sidebar = document.querySelector("[data-sidebar]");
+    const sidebarBtn = document.querySelector("[data-sidebar-btn]");
+    sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); });
+
+    // Modal stubs
+    const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
+    const modalContainer = document.querySelector("[data-modal-container]");
+    const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
+    const overlay = document.querySelector("[data-overlay]");
+    const modalImg = document.querySelector("[data-modal-img]");
+    const modalTitle = document.querySelector("[data-modal-title]");
+    const modalText = document.querySelector("[data-modal-text]");
+
+    const testimonialsModalFunc = function () {
+      modalContainer.classList.toggle("active");
+      overlay.classList.toggle("active");
+    }
+    for (let i = 0; i < testimonialsItem.length; i++) {
+      testimonialsItem[i].addEventListener("click", function () {
+        modalImg.src = this.querySelector("[data-testimonials-avatar]").src;
+        modalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
+        modalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
+        modalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
+        testimonialsModalFunc();
+      });
+    }
+    modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+    overlay.addEventListener("click", testimonialsModalFunc);
+
+    // Portfolio filter
+    const select = document.querySelector("[data-select]");
+    const selectItems = document.querySelectorAll("[data-select-item]");
+    const selectValue = document.querySelector("[data-selecct-value]");
+    const filterBtn = document.querySelectorAll("[data-filter-btn]");
+    const filterItems = document.querySelectorAll("[data-filter-item]");
+
+    select.addEventListener("click", function () { elementToggleFunc(this); });
+
+    for (let i = 0; i < selectItems.length; i++) {
+      selectItems[i].addEventListener("click", function () {
+        let selectedValue = this.innerText.toLowerCase();
+        selectValue.innerText = this.innerText;
+        elementToggleFunc(select);
+        filterFunc(selectedValue);
+      });
+    }
+
+    const filterFunc = function (selectedValue) {
+      for (let i = 0; i < filterItems.length; i++) {
+        if (selectedValue === "all" || selectedValue === filterItems[i].dataset.category) {
+          filterItems[i].classList.add("active");
+        } else {
+          filterItems[i].classList.remove("active");
+        }
+      }
+    }
+
+    let lastClickedBtn = filterBtn[0];
+    for (let i = 0; i < filterBtn.length; i++) {
+      filterBtn[i].addEventListener("click", function () {
+        let selectedValue = this.innerText.toLowerCase();
+        selectValue.innerText = this.innerText;
+        filterFunc(selectedValue);
+        lastClickedBtn.classList.remove("active");
+        this.classList.add("active");
+        lastClickedBtn = this;
+      });
+    }
+
+    // Contact form
+    const form = document.querySelector("[data-form]");
+    const formInputs = document.querySelectorAll("[data-form-input]");
+    const formBtn = document.querySelector("[data-form-btn]");
+
+    for (let i = 0; i < formInputs.length; i++) {
+      formInputs[i].addEventListener("input", function () {
+        if (form.checkValidity()) {
+          formBtn.removeAttribute("disabled");
+        } else {
+          formBtn.setAttribute("disabled", "");
+        }
+      });
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const btnText = formBtn.querySelector("span");
+      formBtn.setAttribute("disabled", "");
+      btnText.textContent = "Sending…";
+
+      const data = {
+        access_key: WEB3FORMS_ACCESS_KEY,
+        name:    form.querySelector('[name="fullname"]').value,
+        email:   form.querySelector('[name="email"]').value,
+        message: form.querySelector('[name="message"]').value,
+        subject: "New message from Portfolio — " + form.querySelector('[name="fullname"]').value,
+      };
+
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(data),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (res) {
+          if (res.success) {
+            btnText.textContent = "Message Sent!";
+            form.reset();
+            formBtn.setAttribute("disabled", "");
+          } else {
+            btnText.textContent = "Failed — Try Again";
+            formBtn.removeAttribute("disabled");
+          }
+          setTimeout(function () { btnText.textContent = "Send Message"; }, 3000);
+        })
+        .catch(function () {
+          btnText.textContent = "Failed — Try Again";
+          formBtn.removeAttribute("disabled");
+          setTimeout(function () { btnText.textContent = "Send Message"; }, 3000);
+        });
+    });
+
+    // Navigation + skill bar animation
+    const navigationLinks = document.querySelectorAll("[data-nav-link]");
+    const pages = document.querySelectorAll("[data-page]");
+    const skillFills = document.querySelectorAll(".skill-progress-fill");
+
+    function animateSkills() {
+      skillFills.forEach(function (fill) {
+        fill.style.width = fill.dataset.fill;
+      });
+    }
+
+    for (let i = 0; i < navigationLinks.length; i++) {
+      navigationLinks[i].addEventListener("click", function () {
+        for (let i = 0; i < pages.length; i++) {
+          if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
+            pages[i].classList.add("active");
+            navigationLinks[i].classList.add("active");
+            window.scrollTo(0, 0);
+            if (pages[i].dataset.page === "resume") {
+              setTimeout(animateSkills, 150);
+            }
+          } else {
+            pages[i].classList.remove("active");
+            navigationLinks[i].classList.remove("active");
+          }
+        }
+      });
+    }
+
+  </script>
+
+</body>
+</html>
