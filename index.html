@@ -690,6 +690,95 @@
       .project-list { grid-template-columns: repeat(5, 1fr); }
     }
 
+    /* ── Theme Toggle Button ──────────────────────────── */
+    .theme-toggle {
+      position: fixed; bottom: 82px; right: 16px; z-index: 100;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--gold); font-size: 22px;
+      box-shadow: var(--shadow-md); transition: var(--t1);
+    }
+    .theme-toggle:hover { transform: scale(1.1) rotate(18deg); box-shadow: var(--shadow-glow); border-color: hsla(45,100%,72%,.35); }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    body.light-mode .theme-toggle .icon-sun { display: block; }
+    body.light-mode .theme-toggle .icon-moon { display: none; }
+    @media (min-width: 1024px) {
+      .theme-toggle { bottom: auto; top: 24px; right: 24px; }
+    }
+
+    /* ── Light Mode ────────────────────────────────────── */
+    body.light-mode {
+      --bg:        hsl(220, 30%, 96%);
+      --surface:   hsla(220, 25%, 100%, 0.96);
+      --surface2:  hsla(220, 20%, 95%, 0.92);
+      --border:    hsla(220, 20%, 68%, 0.28);
+      --border2:   hsla(220, 20%, 60%, 0.18);
+      --gold:      hsl(38, 88%, 36%);
+      --gold-dim:  hsla(38, 88%, 36%, 0.1);
+      --blue:      hsl(210, 78%, 38%);
+      --blue-dim:  hsla(210, 78%, 38%, 0.1);
+      --purple:    hsl(270, 62%, 46%);
+      --white:     hsl(220, 22%, 12%);
+      --muted:     hsla(220, 18%, 40%, 0.82);
+      --danger:    hsl(0, 68%, 48%);
+      --grad-gold: linear-gradient(135deg, hsl(38,88%,36%), hsl(28,88%,30%));
+      --grad-blue: linear-gradient(135deg, hsl(210,78%,38%), hsl(190,78%,30%));
+      --grad-tri:  linear-gradient(135deg, hsl(38,88%,36%), hsl(210,78%,38%), hsl(270,62%,46%));
+      --grad-text: linear-gradient(135deg, hsl(38,88%,30%), hsl(28,88%,24%));
+      --shadow-sm:  0 2px 14px hsla(220,22%,45%,0.1);
+      --shadow-md:  0 8px 32px hsla(220,22%,45%,0.14);
+      --shadow-lg:  0 16px 56px hsla(220,22%,45%,0.18);
+      --shadow-glow: 0 0 24px hsla(38,88%,46%,0.22);
+      background: var(--bg);
+      color: var(--white);
+    }
+    body.light-mode::before {
+      background: radial-gradient(circle, hsla(210,100%,62%,.1) 0%, transparent 70%);
+    }
+    body.light-mode::after {
+      background: radial-gradient(circle, hsla(270,80%,66%,.08) 0%, transparent 70%);
+    }
+
+    /* Navbar in light mode */
+    body.light-mode .navbar { background: hsla(220, 28%, 98%, 0.92); }
+    @media (min-width: 1024px) {
+      body.light-mode .navbar { background: hsla(220, 25%, 100%, 0.88); }
+    }
+
+    /* Skill progress track */
+    body.light-mode .skill-progress-bg { background: hsla(220, 20%, 68%, 0.2); }
+
+    /* Scrollbar in light mode */
+    body.light-mode::-webkit-scrollbar-track { background: var(--surface2); }
+    body.light-mode::-webkit-scrollbar-thumb { background: hsla(220,20%,60%,0.35); }
+    body.light-mode::-webkit-scrollbar-thumb:hover { background: hsla(220,20%,50%,0.5); }
+
+    /* Project thumbnails always have dark bg — keep internal text light */
+    body.light-mode .thumb-icon { color: hsl(45,100%,72%); filter: drop-shadow(0 0 16px hsla(45,100%,72%,0.7)); }
+    body.light-mode .thumb-stack { color: hsla(0,0%,88%,.82); background: hsla(0,0%,0%,.3); border-color: hsla(0,0%,100%,.14); }
+    body.light-mode .project-thumb::after {
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    }
+
+    /* Eye icon overlay — keep dark backdrop regardless of mode */
+    body.light-mode .project-item-icon-box { background: hsla(0,0%,0%,.5); color: hsl(45,100%,72%); }
+    body.light-mode .project-item > a:hover .project-img::before { background: hsla(220,20%,20%,.35); }
+
+    /* "QA Engineer" pill: text on gold gradient needs dark color */
+    body.light-mode .info-content .title { color: hsl(38, 55%, 10%); }
+
+    /* Active filter btn text on gold background */
+    body.light-mode .filter-item button.active { color: hsl(38, 55%, 10%); }
+
+    /* Map: normal grayscale, no invert in light mode */
+    body.light-mode .mapbox iframe { filter: grayscale(0.5); }
+
+    /* Timeline dot ring uses --bg; works via variable inheritance */
+
     /* ── Plugin Popup ──────────────────────────────────── */
     .plugin-popup { position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; visibility: hidden; }
     .plugin-popup.active { visibility: visible; }
@@ -714,6 +803,12 @@
 </head>
 
 <body>
+
+  <!-- Light / Dark theme toggle -->
+  <button class="theme-toggle" id="themeToggle" title="Toggle light / dark mode" aria-label="Toggle theme">
+    <ion-icon name="sunny-outline" class="icon-sun"></ion-icon>
+    <ion-icon name="moon-outline" class="icon-moon"></ion-icon>
+  </button>
 
   <div class="overlay" data-overlay></div>
 
@@ -1708,6 +1803,21 @@
     document.addEventListener("keydown", function(e) {
       if (e.key === "Escape") closePluginPopup();
     });
+
+    // ── Theme Toggle ─────────────────────────────────────
+    (function() {
+      var toggle = document.getElementById("themeToggle");
+      if (localStorage.getItem("portfolio-theme") === "light") {
+        document.body.classList.add("light-mode");
+      }
+      toggle.addEventListener("click", function() {
+        document.body.classList.toggle("light-mode");
+        localStorage.setItem(
+          "portfolio-theme",
+          document.body.classList.contains("light-mode") ? "light" : "dark"
+        );
+      });
+    })();
 
   </script>
 
