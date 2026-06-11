@@ -453,6 +453,7 @@
       position: relative; width: 100%; height: 190px; min-height: 160px;
       border-radius: var(--radius-md); overflow: hidden; margin-bottom: 14px;
       border: 1px solid var(--border);
+      display: flex; flex-direction: column;
     }
     .project-img::before {
       content: ""; position: absolute; inset: 0;
@@ -468,7 +469,7 @@
 
     /* Project thumbnails */
     .project-thumb {
-      width: 100%; height: 100%;
+      width: 100%; flex: 1;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 14px;
       padding: 22px 18px;
