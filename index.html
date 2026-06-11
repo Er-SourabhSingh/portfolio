@@ -789,12 +789,21 @@
     body.light-mode .social-link:hover { color: var(--gold); background: var(--gold-dim); border-color: hsla(38,88%,34%,0.3); }
 
     /* ── Navbar ── */
-    body.light-mode .navbar { background: hsla(220,24%,98%,0.93); border-color: var(--border); }
-    body.light-mode .navbar-link { color: var(--muted); }
-    body.light-mode .navbar-link:hover { color: var(--white); }
-    body.light-mode .navbar-link.active { color: var(--gold); }
+    body.light-mode .navbar {
+      background: rgba(255,255,255,0.98);
+      border-color: hsla(220,18%,72%,0.4);
+      box-shadow: 0 -1px 0 hsla(220,18%,72%,0.35), 0 -8px 24px hsla(220,22%,50%,0.1);
+    }
+    body.light-mode .navbar-link { color: hsl(220,18%,38%); font-weight: var(--fw-5); }
+    body.light-mode .navbar-link:hover { color: hsl(220,22%,12%); }
+    body.light-mode .navbar-link.active { color: var(--gold); font-weight: var(--fw-6); }
+    body.light-mode .navbar-link.active::after { width: 26px; height: 3px; }
     @media (min-width: 1024px) {
-      body.light-mode .navbar { background: hsla(0,0%,100%,0.9); }
+      body.light-mode .navbar {
+        background: rgba(255,255,255,0.96);
+        box-shadow: 0 2px 16px hsla(220,22%,50%,0.12), 0 1px 0 hsla(220,18%,72%,0.3);
+        border-bottom: 1px solid hsla(220,18%,72%,0.3);
+      }
     }
 
     /* ── About / Services ── */
@@ -835,7 +844,16 @@
     /* ── Project cards ── */
     body.light-mode .project-title { color: var(--white); }
     body.light-mode .project-category { color: var(--muted); }
-    body.light-mode .project-img { border-color: var(--border); }
+    body.light-mode .project-img { border-color: hsla(220,18%,70%,0.35); box-shadow: 0 4px 16px hsla(220,22%,50%,0.1); }
+    /* Portfolio card backgrounds — lighter, more vibrant for light mode */
+    body.light-mode .project-thumb-mt1 { background: linear-gradient(145deg, hsl(173,60%,36%) 0%, hsl(196,68%,26%) 100%); }
+    body.light-mode .project-thumb-mt2 { background: linear-gradient(145deg, hsl(14,65%,38%) 0%, hsl(346,60%,28%) 100%); }
+    body.light-mode .project-thumb-mt3 { background: linear-gradient(145deg, hsl(207,75%,38%) 0%, hsl(224,68%,28%) 100%); }
+    body.light-mode .project-thumb-mt4 { background: linear-gradient(145deg, hsl(146,62%,32%) 0%, hsl(161,68%,22%) 100%); }
+    body.light-mode .project-thumb-mt5 { background: linear-gradient(145deg, hsl(252,60%,42%) 0%, hsl(270,56%,30%) 100%); }
+    body.light-mode .project-thumb-1   { background: linear-gradient(145deg, hsl(215,70%,38%) 0%, hsl(198,74%,26%) 100%); }
+    body.light-mode .project-thumb-2   { background: linear-gradient(145deg, hsl(148,60%,32%) 0%, hsl(166,66%,22%) 100%); }
+    body.light-mode .project-thumb-3   { background: linear-gradient(145deg, hsl(258,62%,40%) 0%, hsl(244,58%,28%) 100%); }
     body.light-mode .project-item > a:hover .project-img::before { background: hsla(220,20%,18%,.32); }
     /* Project thumbnails always have dark gradient bg — internal styles same in both modes */
     body.light-mode .thumb-icon { color: rgba(255,255,255,.92); filter: drop-shadow(0 2px 18px rgba(255,255,255,.22)); }
