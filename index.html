@@ -703,22 +703,34 @@
     }
 
     /* ── Theme Toggle Button ──────────────────────────── */
-    .theme-toggle {
-      position: fixed; bottom: 82px; right: 16px; z-index: 100;
-      width: 44px; height: 44px; border-radius: 50%;
-      background: var(--surface); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--gold); font-size: 22px;
-      box-shadow: var(--shadow-md); transition: var(--t1);
+    /* ── Navbar theme toggle item ── */
+    .navbar-theme-item {
+      margin-left: 6px;
+      padding-left: 12px;
+      border-left: 1px solid var(--border);
+      display: flex; align-items: center;
     }
-    .theme-toggle:hover { transform: scale(1.1) rotate(18deg); box-shadow: var(--shadow-glow); border-color: hsla(45,100%,72%,.35); }
+    .theme-toggle {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--muted); font-size: 18px;
+      transition: var(--t1);
+    }
+    .theme-toggle:hover {
+      color: var(--gold);
+      background: var(--gold-dim);
+      border-color: hsla(45,100%,72%,.35);
+      transform: rotate(20deg) scale(1.1);
+    }
     .theme-toggle .icon-sun { display: none; }
     .theme-toggle .icon-moon { display: block; }
     body.light-mode .theme-toggle .icon-sun { display: block; }
     body.light-mode .theme-toggle .icon-moon { display: none; }
-    @media (min-width: 1024px) {
-      .theme-toggle { bottom: auto; top: 24px; right: 24px; }
-    }
+    body.light-mode .navbar-theme-item { border-left-color: hsla(220,18%,72%,0.5); }
+    body.light-mode .theme-toggle { color: hsl(220,18%,40%); border-color: hsla(220,18%,72%,0.5); }
+    body.light-mode .theme-toggle:hover { color: var(--gold); background: var(--gold-dim); border-color: hsla(38,88%,34%,.35); }
 
     /* ══════════════════════════════════════════════════════
        LIGHT MODE — full theme override
@@ -903,12 +915,6 @@
 
 <body>
 
-  <!-- Light / Dark theme toggle -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle light / dark mode" aria-label="Toggle theme">
-    <ion-icon name="sunny-outline" class="icon-sun"></ion-icon>
-    <ion-icon name="moon-outline" class="icon-moon"></ion-icon>
-  </button>
-
   <div class="overlay" data-overlay></div>
 
   <!-- Plugin Detail Popup -->
@@ -1046,6 +1052,12 @@
           <li class="navbar-item"><button class="navbar-link" data-nav-link>Resume</button></li>
           <li class="navbar-item"><button class="navbar-link" data-nav-link>Portfolio</button></li>
           <li class="navbar-item"><button class="navbar-link" data-nav-link>Contact</button></li>
+          <li class="navbar-item navbar-theme-item">
+            <button class="theme-toggle" id="themeToggle" title="Toggle light / dark mode" aria-label="Toggle theme">
+              <ion-icon name="sunny-outline" class="icon-sun"></ion-icon>
+              <ion-icon name="moon-outline" class="icon-moon"></ion-icon>
+            </button>
+          </li>
         </ul>
       </nav>
 
