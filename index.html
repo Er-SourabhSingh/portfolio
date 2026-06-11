@@ -913,7 +913,7 @@
   </style>
 </head>
 
-<body>
+<body class="light-mode">
 
   <div class="overlay" data-overlay></div>
 
@@ -1892,8 +1892,8 @@
     // ── Theme Toggle ─────────────────────────────────────
     (function() {
       var toggle = document.getElementById("themeToggle");
-      if (localStorage.getItem("portfolio-theme") === "light") {
-        document.body.classList.add("light-mode");
+      if (localStorage.getItem("portfolio-theme") === "dark") {
+        document.body.classList.remove("light-mode");
       }
       toggle.addEventListener("click", function() {
         document.body.classList.toggle("light-mode");
